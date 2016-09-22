@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @ToString
 public class Role {
 
-	private Long roleId;
+    private Long roleId;
 
-	private String name;
+    private String name;
 
-	private LocalDateTime createTime;
+    private LocalDateTime createTime;
 
-	private LocalDateTime updateTime;
+    private LocalDateTime updateTime;
 }

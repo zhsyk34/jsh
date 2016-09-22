@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface RoleDao extends CommonDao<Role, Long> {
 
-	List<Role> findList(String name, Sort sort, Page page);
+    List<Role> findList(String name, Sort sort, Page page);
 
-	int count(String name);
+    int count(String name);
 }
