@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.jsh.dao.RoleDao">
+    <sql id="entity">role</sql>
+    <sql id="id">roleId</sql>
+    <sql id="columns">roleId, name, createTime, updateTime</sql>
+    <sql id="page">
+        <if test="offset >= 0 and limit > 0">
+            limit #{offset}, #{limit}
+        </if>
+    </sql>
+    <sql id="sort">
+        <if test="sort != null and !sort.isEmpty() and order != null and !order.isEmpty()">
+            ORDER BY ${sort} ${order}
+        </if>
+    </sql>
+
+    <insert id="save" keyProperty="roleId">
+        INSERT INTO
+        <include refid="entity"/>
+        (<include refid="columns"/>)
+        VALUES
+        (#{roleId}, #{name}, #{createTime}, #{updateTime})
+    </insert>
+    <insert id="saves" keyProperty="roleId">
+        INSERT INTO
+        <include refid="entity"/>
+        (<include refid="columns"/>)
+        VALUES
+        <foreach collection="list" item="entity" separator=",">
+            (#{entity.roleId}, #{entity.name}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{roleId}
+    </delete>
+    <delete id="deleteByEntity">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{roleId}
+    </delete>
+    <delete id="deleteByIds">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByEntities">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="list" item="entity" open="(" separator="," close=")">
+            #{entity.roleId}
+        </foreach>
+    </delete>
+    <update id="update">
+        UPDATE
+        <include refid="entity"/>
+        SET
+        name = #{name}, createTime = #{createTime}, updateTime = CURRENT_TIME
+        WHERE
+        <include refid="id"/>
+        = #{roleId}
+    </update>
+    <select id="findById" resultType="role">
+        SELECT * FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{roleId}
+    </select>
+    <select id="findList" resultType="role">
+        SELECT * FROM
+        <include refid="entity"/>
+        <include refid="search"/>
+        <include refid="sort"/>
+        <include refid="page"/>
+    </select>
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="entity"/>
+        <include refid="search"/>
+    </select>
+
+    <sql id="search">
+        <where>
+            <if test="name != null and !name.isEmpty()">
+                name LIKE "%"#{name}"%"
+            </if>
+        </where>
+    </sql>
+</mapper>

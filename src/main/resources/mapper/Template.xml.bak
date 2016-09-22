@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.zsy.dao.HouseDao">
+    <sql id="entity">house</sql>
+    <sql id="id">id</sql>
+    <sql id="columns">id, name, price, area, description, buildTime, createTime, updateTime</sql>
+    <sql id="page">
+        <if test="offset >= 0 and limit > 0">
+            limit #{offset}, #{limit}
+        </if>
+    </sql>
+    <sql id="sort">
+        <if test="sort != null and !sort.isEmpty() and order != null and !order.isEmpty()">
+            ORDER BY ${sort} ${order}
+        </if>
+    </sql>
+
+    <insert id="save" keyProperty="id">
+        INSERT INTO
+        <include refid="entity"/>
+        (<include refid="columns"/>)
+        VALUES
+        (NULL, #{name}, #{price}, #{area}, #{description}, #{buildTime}, #{createTime}, #{updateTime})
+    </insert>
+    <insert id="saves" keyProperty="id">
+        INSERT INTO
+        <include refid="entity"/>
+        (<include refid="columns"/>)
+        VALUES
+        <foreach collection="list" item="entity" separator=",">
+            (#{entity.id}, #{entity.name}, #{entity.price}, #{entity.area}, #{entity.description}, #{entity.buildTime}, CURRENT_TIMESTAMP , NULL)
+        </foreach>
+    </insert>
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+    <delete id="deleteByEntity">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+    <delete id="deleteByIds">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByEntities">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="list" item="entity" open="(" separator="," close=")">
+            #{entity.id}
+        </foreach>
+    </delete>
+    <update id="update">
+        UPDATE
+        <include refid="entity"/>
+        SET
+        name = #{name}, price = #{price}, area = #{area}, description = #{description}, buildTime = #{buildTime}, createTime = #{createTime}, updateTime = CURRENT_TIMESTAMP
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </update>
+    <select id="findById" resultType="House">
+        SELECT * FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </select>
+    <select id="findList" resultType="House">
+        SELECT * FROM
+        <include refid="entity"/>
+        <include refid="search"/>
+        <include refid="sort"/>
+        <include refid="page"/>
+    </select>
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="entity"/>
+        <include refid="search"/>
+    </select>
+
+    <sql id="search">
+        <where>
+            <if test="name != null and !name.isEmpty()">
+                name LIKE "%"#{name}"%"
+            </if>
+        </where>
+    </sql>
+</mapper>
