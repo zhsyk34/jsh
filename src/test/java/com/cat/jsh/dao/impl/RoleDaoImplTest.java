@@ -15,6 +15,15 @@ public class RoleDaoImplTest extends InitTestDao {
 
 	@Resource
 	private RoleDao roleDao;
+	@Resource
+	private RoleDao roleDao;
+
+	@Test
+	public void save22() throws Exception {
+		Role role = new Role(null, "yes", null, null);
+		System.out.println(roleDao.save(role));
+		System.out.println(role.getRoleId());
+	}
 
 	@Test
 	public void save() throws Exception {

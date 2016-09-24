@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns="http://www.springframework.org/schema/beans" xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <aop:config>
+        <aop:aspect id="namespace" ref="namespace">
+            <aop:pointcut id="pointcut" expression="execution(public * com.cat.jsh.aop.TestAop.*(..))"/>
+            <aop:around method="better" pointcut-ref="pointcut"/>
+            <!--<aop:before method="simple" pointcut-ref="pointcut"/>-->
+        </aop:aspect>
+        <!--<aop:advisor advice-ref="" pointcut-ref="namespace"/>-->
+    </aop:config>
+
+    <bean id="namespace" class="com.cat.jsh.aop.NamespaceAspect"/>
+</beans>

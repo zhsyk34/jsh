@@ -5,8 +5,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestAop {
 
+	public String save(String first, String second) {
+		return first + "-" + second;
+	}
+
 	public String save() {
-		return "正常执行任务...";
+		return "good.";
 	}
 
 }
